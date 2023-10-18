@@ -1,0 +1,50 @@
+html {
+    text-align: center;
+}
+
+body {
+    font-family: 'Times New Roman', Times, serif;
+}
+
+main {
+    height: 100vh;
+    width: 100vw;
+    padding-top: 10vh;
+    color: #f0f0f0;
+    background-color: rgba(0, 0, 0, 0.932);
+}
+
+#time {
+    padding: 2rem;
+    font-size: 1.2rem;
+    line-height: 1.5;
+}
+
+@media (min-width: 576px) and (max-width: 768px) {
+    #time {
+        font-size: 1.4rem;
+    }
+}
+
+@media (min-width: 769px) and (max-width: 992px) {
+    #time {
+        font-size: 1.6rem;
+    }
+}
+
+@media (min-width: 993px) and (max-width: 1200px) {
+    #time {
+        font-size: 1.8rem;
+    }
+}
+
+@media (min-width: 1201px) {
+    #time {
+        font-size: 2rem;
+    }
+}
+
+#quote {
+    padding: 1rem;
+    font-style: italic;
+}
