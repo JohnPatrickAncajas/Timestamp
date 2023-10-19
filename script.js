@@ -11,8 +11,7 @@ function updateTimestamp() {
     const NOW = new Date();
     const SECONDS = NOW.getSeconds().toString().padStart(2, '0');
     const MINUTES = NOW.getMinutes().toString().padStart(2, '0');
-    // const HOURS = NOW.getHours();
-    const HOURS = 16;
+    const HOURS = NOW.getHours();
     const DATE = NOW.getDate();
     const DAY = NOW.getDay();
     const MONTH = NOW.getMonth() + 1;
@@ -59,6 +58,16 @@ function updateTimestamp() {
 
     // This part handles the quote every day
 
+    const dayMap = new Map([
+        [0, "Sunday"],
+        [1, "Monday"],
+        [2, "Tuesday"],
+        [3, "Wednesday"],
+        [4, "Thursday"],
+        [5, "Friday"],
+        [6, "Saturday"]
+    ]);
+
     if (DATE === 1) {
         quote = "It's a new month, embrace change!";
     } else if (DATE === 31) {
@@ -80,17 +89,17 @@ function updateTimestamp() {
     const greetingSheet = document.querySelector("#greeting");
 
     function applyMorningTheme() {
-        mainSheet.style.color = "#333";
+        mainSheet.style.color = "#1f1f1f";
         mainSheet.style.background = "linear-gradient(315deg, #F8FFAE, #43C6AC)";
-        quoteSheet.style.color = "#1f1f1f";
-        greetingSheet.style.color = "#1f1f1f";
+        quoteSheet.style.color = "#333";
+        greetingSheet.style.color = "#333";
     }
 
     function applyAfternoonTheme() {
-        mainSheet.style.color = "#fff";
-        mainSheet.style.background = "linear-gradient(315deg, #f5af19, #f12711)";
-        quoteSheet.style.color = "#fff";
-        greetingSheet.style.color = "#fff";
+        mainSheet.style.color = "#ffffff";
+        mainSheet.style.background = "linear-gradient(315deg, #ff512f, #f09819)";
+        quoteSheet.style.color = "#ebebeb";
+        greetingSheet.style.color = "#ebebeb";
     }
 
     function applyEveningTheme() {
@@ -117,7 +126,7 @@ function updateTimestamp() {
     // Handles the greeting
 
     const greetingElement = document.getElementById("greeting");
-    greetingElement.innerHTML = `Good ${greetingPeriod}! It is currently ${hoursValue} ${dayPeriod}`;
+    greetingElement.innerHTML = `Good ${greetingPeriod}! It is currently in the ${DATE}${datePeriod}`;
 }
 
 setInterval(updateTimestamp, 1000);
