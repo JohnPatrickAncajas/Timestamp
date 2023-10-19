@@ -1,54 +1,71 @@
-function updateClock() {
+function updateTimestamp() {
+
+    // This part manages the title
+
+    const title = "Timestamp";
+    const titleElement = document.querySelector("#title");
+    titleElement.innerHTML = title;
+
+    // This updates the time and date
+
     const NOW = new Date();
-    const SECONDS = NOW.getSeconds();
-    const MINUTES = NOW.getMinutes();
-    const HOURS = NOW.getHours();
-    const DAY = NOW.getDate();
+    const SECONDS = NOW.getSeconds().toString().padStart(2, '0');
+    const MINUTES = NOW.getMinutes().toString().padStart(2, '0');
+    // const HOURS = NOW.getHours();
+    const HOURS = 16;
+    const DATE = NOW.getDate();
+    const DAY = NOW.getDay();
     const MONTH = NOW.getMonth() + 1;
     const YEAR = NOW.getFullYear();
 
-    let secondsElement = 0;
-    let minutesElement = 0;
-    let hoursValue = HOURS;
-    let dayPeriod = "AM";
-
-    if (HOURS >= 12) {
-        dayPeriod = "PM";
-
-        if (HOURS > 12) {
-            hoursValue = HOURS - 12;
-            dayPeriod = "PM";
-        }
-    } 
-
-    if (SECONDS >= 10) {
-        secondsElement = "";
-    }
-
-    if (MINUTES >= 10) {
-        minutesElement = "";
-    }
+    const hoursValue = (HOURS % 12) || 12;
+    const dayPeriod = HOURS < 12 ? "AM" : "PM";
 
     const timeElement = document.getElementById("time");
-    timeElement.innerHTML = `${hoursValue}:${minutesElement}${MINUTES}:${secondsElement}${SECONDS} ${dayPeriod}<br>${DAY}/${MONTH}/${YEAR}`;
+    timeElement.innerHTML = `${hoursValue}:${MINUTES}:${SECONDS} ${dayPeriod}<br>${DATE}/${MONTH}/${YEAR}`;
 
-    // Provide a quote based on time, day, and month
+    // This part controls the quotes every hour
 
-    let quote = "The value of time is immeasurable.";
+    const quotesMap = new Map([
+        [0, "In the embrace of midnight, dreams come alive."],
+        [1, "Under the canopy of night, stars whisper their secrets."],
+        [2, "In the depth of night, find serenity in the quiet."],
+        [3, "The night holds mysteries, waiting to be uncovered."],
+        [4, "As the world sleeps, the night sky paints its canvas."],
+        [5, "Night's silence welcomes the first light of dawn."],
+        [6, "With the dawn's arrival, new opportunities arise."],
+        [7, "Morning sun heralds a brand new day with endless promise."],
+        [8, "In the gentle morning light, find your inner strength."],
+        [9, "Morning is a canvas; paint it with your aspirations."],
+        [10, "In the heart of morning, discover your purpose and passion."],
+        [11, "Amid the morning hustle, nurture your inner calm."],
+        [12, "Noon sun shines, fueling the fire of possibilities."],
+        [13, "In the heart of the day, seize the moment and shine."],
+        [14, "Afternoon unveils the world's beauty in full spectrum."],
+        [15, "The sun may wane, but your spirit continues to blaze."],
+        [16, "As the day ages, find peace in the afternoon's grace."],
+        [17, "In the golden hour, treasure the beauty of the afternoon."],
+        [18, "Dusk descends, painting the world in warm hues."],
+        [19, "Evening's arrival marks the transition to tranquil night."],
+        [20, "In the quiet of the night, dreams come to life."],
+        [21, "Night's serenade invites you to explore the cosmos."],
+        [22, "Under the night's embrace, find your inner universe."],
+        [23, "In the stillness of night, introspection and wonder reside."]
+    ]);
+    
+    const quote = quotesMap.get(HOURS) || "Invalid hour";
+    const quoteElement = document.querySelector("#quote");
+    quoteElement.innerHTML = `"${quote}"`;
 
-    if (HOURS >= 6 && HOURS < 12) {
-        quote = "Good morning! Make the most of your day!";
-    } else if (HOURS >= 12 && HOURS < 18) {
-        quote = "Good afternoon! Time for a break.";
-    } else if (HOURS >= 18 && HOURS < 24) {
-        quote = "Good evening! Reflect on your day.";
-    }
+    // This part handles the quote every day
 
-    if (DAY === 1) {
+    if (DATE === 1) {
         quote = "It's a new month, embrace change!";
-    } else if (DAY === 31) {
+    } else if (DATE === 31) {
         quote = "The month is coming to an end, plan for the next.";
     }
+
+    // this part handles the quotes every month
 
     if (MONTH === 1) {
         quote = "Happy New Year! A fresh start awaits.";
@@ -56,10 +73,53 @@ function updateClock() {
         quote = "July is here, enjoy the summer!";
     }
 
-    const quoteElement = document.getElementById("quote");
-    quoteElement.innerHTML = `${quote}`;
+    // Controls the theme that depends on the period of day
+
+    const mainSheet = document.querySelector("main");
+    const quoteSheet = document.querySelector("#quote");
+    const greetingSheet = document.querySelector("#greeting");
+
+    function applyMorningTheme() {
+        mainSheet.style.color = "#333";
+        mainSheet.style.background = "linear-gradient(315deg, #F8FFAE, #43C6AC)";
+        quoteSheet.style.color = "#1f1f1f";
+        greetingSheet.style.color = "#1f1f1f";
+    }
+
+    function applyAfternoonTheme() {
+        mainSheet.style.color = "#fff";
+        mainSheet.style.background = "linear-gradient(315deg, #f5af19, #f12711)";
+        quoteSheet.style.color = "#fff";
+        greetingSheet.style.color = "#fff";
+    }
+
+    function applyEveningTheme() {
+        mainSheet.style.color = "#f0f0f0";
+        mainSheet.style.background = "linear-gradient(315deg, #2C5364, #203A43, #0F2027)";
+        quoteSheet.style.color = "#e2e2e2ea";
+        greetingSheet.style.color = "#e2e2e2ea";
+    }
+
+    let greetingPeriod = "evening";
+
+    if (HOURS >= 0 && HOURS < 6) {
+        applyEveningTheme();
+    } else if (HOURS >= 6 && HOURS < 12) {
+        applyMorningTheme();
+        greetingPeriod = "morning";
+    } else if (HOURS >= 12 && HOURS < 18) {
+        applyAfternoonTheme();
+        greetingPeriod = "afternoon";
+    } else if (HOURS >= 18 && HOURS < 24) {
+        applyEveningTheme();
+    }
+
+    // Handles the greeting
+
+    const greetingElement = document.getElementById("greeting");
+    greetingElement.innerHTML = `Good ${greetingPeriod}! It is currently ${hoursValue} ${dayPeriod}`;
 }
 
-setInterval(updateClock, 1000);
+setInterval(updateTimestamp, 1000);
 
-updateClock();
+updateTimestamp();
