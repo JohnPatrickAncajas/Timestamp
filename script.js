@@ -21,7 +21,7 @@ function updateTimestamp() {
     const dayPeriod = HOURS < 12 ? "AM" : "PM";
 
     const timeElement = document.getElementById("time");
-    timeElement.innerHTML = `${hoursValue}:${MINUTES}:${SECONDS} ${dayPeriod}<br>${DATE}/${MONTH}/${YEAR}`;
+    timeElement.innerHTML = `<hr>${hoursValue}:${MINUTES}:${SECONDS} ${dayPeriod}<br>${DATE}/${MONTH}/${YEAR}<br><hr>`;
 
     // This part controls the quotes every hour
 
@@ -57,24 +57,14 @@ function updateTimestamp() {
     quoteElement.innerHTML = `"${quote}"`;
 
     // This part handles the quote every day
-
-    const dayMap = new Map([
-        [0, "Sunday"],
-        [1, "Monday"],
-        [2, "Tuesday"],
-        [3, "Wednesday"],
-        [4, "Thursday"],
-        [5, "Friday"],
-        [6, "Saturday"]
-    ]);
-
+      
     if (DATE === 1) {
         quote = "It's a new month, embrace change!";
     } else if (DATE === 31) {
         quote = "The month is coming to an end, plan for the next.";
     }
 
-    // this part handles the quotes every month
+    // This part handles the quotes every month
 
     if (MONTH === 1) {
         quote = "Happy New Year! A fresh start awaits.";
@@ -84,27 +74,27 @@ function updateTimestamp() {
 
     // Controls the theme that depends on the period of day
 
-    const mainSheet = document.querySelector("main");
+    const bodySheet = document.querySelector("body");
     const quoteSheet = document.querySelector("#quote");
     const greetingSheet = document.querySelector("#greeting");
 
     function applyMorningTheme() {
-        mainSheet.style.color = "#1f1f1f";
-        mainSheet.style.background = "linear-gradient(315deg, #F8FFAE, #43C6AC)";
+        bodySheet.style.backgroundImage = "linear-gradient(315deg, #F8FFAE, #43C6AC)";
+        bodySheet.style.color = "#1f1f1f";
         quoteSheet.style.color = "#333";
         greetingSheet.style.color = "#333";
     }
 
     function applyAfternoonTheme() {
-        mainSheet.style.color = "#ffffff";
-        mainSheet.style.background = "linear-gradient(315deg, #ff512f, #f09819)";
-        quoteSheet.style.color = "#ebebeb";
-        greetingSheet.style.color = "#ebebeb";
+        bodySheet.style.backgroundImage = "linear-gradient(315deg, #e1eec3, #f05053)";
+        bodySheet.style.color = "#1f1f1f";
+        quoteSheet.style.color = "#333";
+        greetingSheet.style.color = "#333";
     }
 
     function applyEveningTheme() {
-        mainSheet.style.color = "#f0f0f0";
-        mainSheet.style.background = "linear-gradient(315deg, #2C5364, #203A43, #0F2027)";
+        bodySheet.style.backgroundImage = "linear-gradient(315deg, #2C5364, #203A43, #0F2027)";
+        bodySheet.style.color = "#f0f0f0";
         quoteSheet.style.color = "#e2e2e2ea";
         greetingSheet.style.color = "#e2e2e2ea";
     }
@@ -125,8 +115,52 @@ function updateTimestamp() {
 
     // Handles the greeting
 
+    const dayMap = new Map([
+        [0, "Sunday"],
+        [1, "Monday"],
+        [2, "Tuesday"],
+        [3, "Wednesday"],
+        [4, "Thursday"],
+        [5, "Friday"],
+        [6, "Saturday"]
+    ]);
+
+    const datePeriod = dayMap.get(DAY) || "Invalid day";
+
+    const monthMap = new Map([
+        [0, "January"],
+        [1, "February"],
+        [2, "March"],
+        [3, "April"],
+        [4, "May"],
+        [5, "June"],
+        [6, "July"],
+        [7, "August"],
+        [8, "September"],
+        [9, "October"],
+        [10, "November"],
+        [11, "December"]
+    ]);
+
+    const monthPeriod = monthMap.get(MONTH - 1) || "Invalid month";
+
+    let lastDigitType = "th";
+
+    const lastDigit = DATE % 10;
+    secondToLastDigit = Math.floor(DATE / 10) % 10;
+      
+    if (lastDigit === 1 && secondToLastDigit !== 1) {
+        lastDigitType = "st";
+    } else if (lastDigit === 2 && secondToLastDigit !== 1) {
+        lastDigitType = "nd";
+    } else if (lastDigit === 3 && secondToLastDigit !== 1) {
+        lastDigitType = "rd";
+    } else {
+        lastDigitType = "th";
+    }
+
     const greetingElement = document.getElementById("greeting");
-    greetingElement.innerHTML = `Good ${greetingPeriod}! It is currently in the ${DATE}${datePeriod}`;
+    greetingElement.innerHTML = `Good ${greetingPeriod}! Today is ${datePeriod} in the ${DATE}${lastDigitType} of ${monthPeriod}, ${YEAR}!`;
 }
 
 setInterval(updateTimestamp, 1000);
