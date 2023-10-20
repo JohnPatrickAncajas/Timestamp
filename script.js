@@ -56,22 +56,6 @@ function updateTimestamp() {
     const quoteElement = document.querySelector("#quote");
     quoteElement.innerHTML = `"${quote}"`;
 
-    // This part handles the quote every day
-      
-    if (DATE === 1) {
-        quote = "It's a new month, embrace change!";
-    } else if (DATE === 31) {
-        quote = "The month is coming to an end, plan for the next.";
-    }
-
-    // This part handles the quotes every month
-
-    if (MONTH === 1) {
-        quote = "Happy New Year! A fresh start awaits.";
-    } else if (MONTH === 7) {
-        quote = "July is here, enjoy the summer!";
-    }
-
     // Controls the theme that depends on the period of day
 
     const bodySheet = document.querySelector("body");
